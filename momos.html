@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Palace | QuickBite Food Delivery</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #ff5722;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #ffdcd1;
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .cart-icon {
+            position: relative;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: white;
+            color: #ff5722;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Restaurant Header */
+        .restaurant-header {
+            position: relative;
+            height: 300px;
+            background: url('/api/placeholder/1200/300') center/cover no-repeat;
+        }
+        
+        .restaurant-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 2rem;
+            color: white;
+        }
+        
+        .restaurant-info-header {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .restaurant-info-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .restaurant-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .restaurant-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .restaurant-rating {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        /* Restaurant Navigation */
+        .restaurant-nav {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 60px;
+            z-index: 90;
+        }
+        
+        .restaurant-nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .restaurant-nav-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+        
+        .restaurant-nav-item {
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            color: #555;
+        }
+        
+        .restaurant-nav-item.active {
+            color: #ff5722;
+        }
+        
+        .restaurant-nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ff5722;
+        }
+        
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: flex;
+            gap: 2rem;
+        }
+        
+        /* Menu Section */
+        .menu-section {
+            flex: 2;
+        }
+        
+        .menu-category {
+            margin-bottom: 3rem;
+        }
+        
+        .menu-category h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item-img {
+            height: 180px;
+            background: url('/api/placeholder/250/180') center/cover no-repeat;
+        }
+        
+        .menu-item-info {
+            padding: 1rem;
+        }
+        
+        .menu-item-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item-info p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            height: 2.8rem;
+            overflow: hidden;
+        }
+        
+        .menu-item-price {
+            font-weight: bold;
+            color: #ff5722;
+            font-size: 1.1rem;
+        }
+        
+        .add-to-cart {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background-color: #ff5722;
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: none;
+            float: right;
+            margin-top: -5px;
+        }
+        
+        /* Cart Section */
+        .cart-section {
+            flex: 1;
+            position: sticky;
+            top: 120px;
+            align-self: flex-start;
+        }
+        
+        .cart-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        
+        .cart-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .cart-item-info {
+            flex: 1;
+        }
+        
+        .cart-item-name {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+        
+        .cart-item-price {
+            color: #ff5722;
+            font-weight: bold;
+        }
+        
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+        }
+        
+        .quantity-btn {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        .quantity-value {
+            margin: 0 0.5rem;
+            font-weight: 500;
+        }
+        
+        .cart-summary {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .cart-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .checkout-btn {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #e64a19;
+        }
+        
+        /* Restaurant Info Section */
+        .restaurant-details {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .restaurant-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tag {
+            background-color: #f0f0f0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .hours-list {
+            list-style: none;
+        }
+        
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .delivery-info span {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .map-container {
+            height: 200px;
+            background: url('/api/placeholder/400/200') center/cover no-repeat;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 2rem;
+        }
+        
+        .review-summary {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .overall-rating {
+            text-align: center;
+        }
+        
+        .rating-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .rating-stars {
+            color: #ffcc00;
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        
+        .rating-count {
+            color: #666;
+        }
+        
+        .rating-breakdown {
+            flex: 1;
+        }
+        
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .rating-label {
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .progress-container {
+            flex: 1;
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #ffcc00;
+        }
+        
+        .review-list {
+            margin-top: 2rem;
+        }
+        
+        .review-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: url('/api/placeholder/50/50') center/cover no-repeat;
+        }
+        
+        .reviewer-name {
+            font-weight: 500;
+        }
+        
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .review-rating {
+            color: #ffcc00;
+        }
+        
+        .review-text {
+            margin-bottom: 1rem;
+        }
+        
+        .review-photos {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        
+        .review-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            background: url('/api/placeholder/100/100') center/cover no-repeat;
+            flex-shrink: 0;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 4rem 1rem 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #ff5722;
+            margin-top: 0.5rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #ff5722;
+        }
+        
+        .footer-column p {
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icon {
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: #ff5722;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Food Item Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-header {
+            position: relative;
+            height: 200px;
+        }
+        
+        .modal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: white;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 1.2rem;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal-price {
+            font-size: 1.3rem;
+            color: #ff5722;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-description {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .options-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .options-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .option-group {
+            margin-bottom: 1rem;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .option-item input {
+            margin-right: 0.5rem;
+        }
+        
+        .option-item label {
+            flex: 1;
+        }
+        
+        .option-price {
+            color: #ff5722;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quantity-label {
+            font-weight: 500;
+        }
+        
+        .quantity-buttons {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background-color: #f5f5f5;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .quantity-value {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            font-weight: 500;
+        }
+        
+        .add-to-cart-btn {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .add-to-cart-btn:hover {
+            background-color: #e64a19;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 250px;
+            height: 100vh;
+            background-color: #ff5722;
+            padding: 2rem;
+            transition: right 0.3s ease;
+            z-index: 200;
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .close-nav {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+            margin-top: 3rem;
+        }
+        
+        .mobile-nav ul li {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 150;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .cart-section {
+                position: static;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .restaurant-overlay {
+                padding: 1.5rem;
+            }
+            
+            .restaurant-info-header h1 {
+                font-size: 2rem;
+            }
+            
+            .restaurant-nav-item {
+                padding: 1rem;
+            }
+            
+            .menu-items {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .review-summary {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .restaurant-meta {
+                gap: 1rem;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .reviewer-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .review-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                🍔 <span>QuickBite</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Restaurants</a>
+                <a href="#">Categories</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <div class="cart-icon">
+                    🛒
+                    <span class="cart-count">2</span>
+                </div>
+            </nav>
+            <div class="mobile-menu">☰</div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+        <button class="close-nav">✕</button>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Restaurants</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Cart (2)</a></li>
+        </ul>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Restaurant Header -->
+    <div class="restaurant-header">
+        <div class="restaurant-overlay">
+            <div class="restaurant-info-header">
+                <h1>Burger Palace</h1>
+                <div class="restaurant-meta">
+                    <span class="restaurant-rating">★★★★☆ 4.5 (120 reviews)</span>
+                    <span>🕒 30-40 min</span>
+                    <span>🚚 Free Delivery</span>
+                    <span>💰 $$</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restaurant Navigation -->
+    <div class="restaurant-nav">
+        <div class="restaurant-nav-container">
+            <div class="restaurant-nav-item active">Burgers</div>
+            <div class="restaurant-nav-item">Sides</div>
+            <div class="restaurant-nav-item">Drinks</div>
+            <div class="restaurant-nav-item">Combos</div>
+            <div class="restaurant-nav-item">Desserts</div>
+            <div class="restaurant-nav-item">Reviews</div>
+            <div class="restaurant-nav-item">Information</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Menu Section -->
+        <div class="menu-section">
+            <!-- Restaurant Details -->
+            <div class="restaurant-details">
+                <div class="detail-section">
+                    <h3>About Momo Palace</h3>
+                    <p>Momo Palace offers a wide variety of gourmet burgers using only the freshest, locally-sourced ingredients. Our patties are hand-formed daily and cooked to perfection. We're committed to providing the best burger experience in town!</p>
+                </div>
+                <div class="detail-section">
+                    <h3>Cuisine</h3>
+                    <div class="restaurant-tags">
+                        <span class="tag">Momo</span>
+                        <span class="tag">Indian</span>
+                        <span class="tag">Fast Food</span>
+                        <span class="tag">Grill</span>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3>Opening Hours</h3>
+                    <ul class="hours-list">
+                        <li><span>Monday - Thursday</span> <span>11:00 AM - 9:00 PM</span></li>
+                        <li><span>Friday - Saturday</span> <span>11:00 AM - 10:00 PM</span></li>
+                        <li><span>Sunday</span> <span>12:00 PM - 8:00 PM</span></li>
+                    </ul>
+                </div>
+                <div class="detail-section">
+                    <h3>Delivery Information</h3>
+                    <div class="delivery-info">
+                        <span>📍 Delivery Area: Within 5 miles</span>
+                        <span>🚚 Delivery Fee: Free for orders over $15</span>
+                        <span>⏰ Delivery Time: 30-40 minutes</span>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3>Location</h3>
+                    <p>123 Burger Street, Downtown, City</p>
+                    <div class="map-container"></div>
+                </div>
+            </div>
+
+            <!-- Menu Categories -->
+            <div class="menu-category" id="burgers">
+                <h2>Signature Burgers</h2>
+                <div class="menu-items">
+                    <div class="menu-item" onclick="openModal()">
+                        <div class="menu-item-img"></div>
+                        <div class="menu-item-info">
+                            <h3>Classic Cheeseburger</h3>
+                            <p>Juicy patty, cheddar cheese, lettuce, tomato, and special sauce.</p>
+                            <span class="menu-item-price">$9.99</span>
+                            <button class="add-to-cart">+</button>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-item-img"></div>
+                        <div class="menu-item-info">
+                            <h3>Bacon Deluxe</h3>
+                            <p> patty, crispy bacon, Swiss cheese, caramelized onions, and BBQ sauce.</p>
+                            <span class="menu-item-price">$12.99</span>
