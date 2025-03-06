@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickBite | Food Delivery</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #ff5722;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            margin-left: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #ffdcd1;
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .cart-icon {
+            position: relative;
+            font-size: 1.2rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: white;
+            color: #ff5722;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1200/600') center/cover no-repeat;
+            color: white;
+            padding: 5rem 1rem;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .search-bar button:hover {
+            background-color: #e64a19;
+        }
+        
+        /* Categories Section */
+        .categories {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: #ff5722;
+            margin: 0.5rem auto 0;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-img {
+            height: 150px;
+            background: url('/api/placeholder/200/150') center/cover no-repeat;
+        }
+        
+        .category-info {
+            padding: 1.5rem;
+        }
+        
+        .category-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Featured Restaurants */
+        .restaurants {
+            background-color: #f0f0f0;
+            padding: 4rem 1rem;
+        }
+        
+        .restaurants-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .restaurant-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .restaurant-img {
+            height: 200px;
+            background: url('/api/placeholder/300/200') center/cover no-repeat;
+            position: relative;
+        }
+        
+        .restaurant-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #ff5722;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .restaurant-info {
+            padding: 1.5rem;
+        }
+        
+        .restaurant-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .restaurant-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #ff9800;
+            font-weight: bold;
+        }
+        
+        .restaurant-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tag {
+            background-color: #f0f0f0;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .order-now {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        
+        .order-now:hover {
+            background-color: #e64a19;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: #ff5722;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            color: #ff5722;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        /* App Section */
+        .app-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/api/placeholder/1200/600') center/cover no-repeat;
+            color: white;
+            padding: 5rem 1rem;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+        
+        .app-content {
+            flex: 1;
+        }
+        
+        .app-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .app-content p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .app-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .app-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background-color: black;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .app-btn:hover {
+            background-color: #333;
+        }
+        
+        .app-btn span {
+            font-size: 0.8rem;
+        }
+        
+        .app-btn strong {
+            font-size: 1.2rem;
+        }
+        
+        .app-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .app-image img {
+            max-width: 300px;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-slider {
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+            padding: 2rem 0;
+        }
+        
+        .testimonial-slide {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: url('/api/placeholder/80/80') center/cover no-repeat;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .testimonial-role {
+            color: #ff5722;
+            font-size: 0.9rem;
+        }
+        
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .slider-dot.active {
+            background-color: #ff5722;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 4rem 1rem 2rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #ff5722;
+            margin-top: 0.5rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #ff5722;
+        }
+        
+        .footer-column p {
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icon {
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: #ff5722;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 900px) {
+            .app-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .app-buttons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .search-bar {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-bar input {
+                width: 100%;
+                border-radius: 10px 10px 0 0;
+            }
+            
+            .search-bar button {
+                width: 100%;
+                border-radius: 0 0 10px 10px;
+            }
+            
+            .app-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        /* Mobile menu */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 250px;
+            height: 100vh;
+            background-color: #ff5722;
+            padding: 2rem;
+            transition: right 0.3s ease;
+            z-index: 200;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .close-nav {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            margin-top: 3rem;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 1.5rem;
+        }
+
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 150;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                🍔 <span>QuickBite</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">Restaurants</a>
+                <a href="#">Categories</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <div class="cart-icon">
+                    🛒
+                    <span class="cart-count">2</span>
+                </div>
+            </nav>
+            <div class="mobile-menu">☰</div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+        <button class="close-nav">✕</button>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Restaurants</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Cart (2)</a></li>
+        </ul>
+    </div>
+    <div class="overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Delicious Food Delivered to Your Door</h1>
+            <p>Order from your favorite restaurants with free delivery on your first order</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for food or restaurant...">
+                <button>Find Food</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="section-title">
+            <h2>Food Categories</h2>
+        </div>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-img"></div>
+                <div class="category-info">
+                    <h3>Pizza</h3>
+                    <p>15 Restaurants</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img"></div>
+                <div class="category-info">
+                    <h3>Burgers</h3>
+                    <p>12 Restaurants</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img"></div>
+                <div class="category-info">
+                    <h3>Sushi</h3>
+                    <p>8 Restaurants</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img"></div>
+                <div class="category-info">
+                    <h3>Pasta</h3>
+                    <p>10 Restaurants</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-img"></div>
+                <div class="category-info">
+                    <h3>Desserts</h3>
+                    <p>14 Restaurants</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Restaurants -->
+    <section class="restaurants">
+        <div class="restaurants-container">
+            <div class="section-title">
+                <h2>Featured Restaurants</h2>
+            </div>
+            <div class="restaurant-grid">
+                <div class="restaurant-card">
+                    <div class="restaurant-img">
+                        <span class="restaurant-badge">Free Delivery</span>
+                    </div>
+                    <div class="restaurant-info">
+                        <h3>Momo Palace</h3>
+                        <div class="restaurant-meta">
+                            <span class="rating">★★★★☆ 4.5</span>
+                            <span>30-40 min</span>
+                        </div>
+                        <div class="restaurant-tags">
+                            <span class="tag">Chinise</span>
+                            <span class="tag">Indian</span>
+                            <span class="tag">Fast Food</span>
+                        </div>
+                        <button class="order-now">Order Now</button>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <div class="restaurant-img">
+                        <span class="restaurant-badge">20% OFF</span>
+                    </div>
+                    <div class="restaurant-info">
+                        <h3>Pizza Express</h3>
+                        <div class="restaurant-meta">
+                            <span class="rating">★★★★★ 4.8</span>
+                            <span>25-35 min</span>
+                        </div>
+                        <div class="restaurant-tags">
+                            <span class="tag">Aalu Paratha</span>
+                            <span class="tag">Momos</span>
+                            <span class="tag">Chowmin</span>
+                        </div>
+                        <button class="order-now">Order Now</button>
+                    </div>
+                </div>
+                <div class="restaurant-card">
+                    <div class="restaurant-img">
+                        <span class="restaurant-badge">New</span>
+                    </div>
+                    <div class="restaurant-info">
+                        <h3>Sushi World</h3>
+                        <div class="restaurant-meta">
+                            <span class="rating">★★★★☆ 4.3</span>
+                            <span>35-45 min</span>
+                        </div>
+                        <div class="restaurant-tags">
+                            <span class="tag">Sushi</span>
+                            <span class="tag">Japanese</span>
+                            <span class="tag">Asian</span>
+                        </div>
+                        <button class="order-now">Order Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="section-title">
+            <h2>How It Works</h2>
+        </div>
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-icon">🍔</div>
+                <h3>Choose Restaurant</h3>
+                <p>Browse hundreds of restaurants and choose your favorite food</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-icon">📝</div>
+                <h3>Place Your Order</h3>
+                <p>Customize your order and proceed to secure checkout</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-icon">🚚</div>
+                <h3>Fast Delivery</h3>
+                <p>Our delivery partner will bring your food to your doorstep</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Section -->
+    <section class="app-section">
+        <div class="app-container">
+            <div class="app-content">
+                <h2>Download Our Mobile App</h2>
+                <p>Get exclusive offers and track your orders in real-time with our mobile app. Available for iOS and Android.</p>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn">
+                        <div>
+                            <span>Download on the</span>
+                            <strong>App Store</strong>
+                        </div>
+                    </a>
+                    <a href="#" class="app-btn">
+                        <div>
+                            <span>GET IT ON</span>
+                            <strong>Google Play</strong>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="app-image">
+                <img src="/api/placeholder/300/600" alt="Mobile App">
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="section-title">
+            <h2>What Our Customers Say</h2>
+        </div>
+        <div class="testimonial-slider">
+            <div class="testimonial-slide">
+                <div class="testimonial-img"></div>
+                <p class="testimonial-text">"QuickBite has revolutionized my lunch breaks! The app is super easy to use, and the food always arrives hot and on time. Their customer service is excellent too!"</p>
+                <h4 class="testimonial-author">Sarah Johnson</h4>
+                <p class="testimonial-role">Regular Customer</p>
+            </div>
+            <div class="slider-controls">
+                <span class="slider-dot active"></span>
+                <span class="slider-dot"></span>
+                <span class="slider-dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>QuickBite</h3>
+                <p>The best food delivery service in town. Order your favorite meals from top restaurants and enjoy fast delivery to your doorstep.</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">f</a>
+                    <a href="#" class="social-icon">t</a>
+                    <a href="#" class="social-icon">in</a>
+                    <a href="#" class="social-icon">ig</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Restaurants</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Customer Support</h3>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Support Center</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <p>New Market Panitanki, Dist-Darjeeling WB</p>
+                <p>Email: info@quickbite.com</p>
+                <p>Phone: +91 6201401919</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 QuickB
